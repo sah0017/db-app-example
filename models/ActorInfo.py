@@ -1,8 +1,9 @@
+from sqlalchemy import select
 from models.schemas import ActorInfo
 from core import ma, db
 
 def get_actor_info():
-     data = ActorInfo.query.all()
+     data = db.session.scalars(select(ActorInfo)).all()
      return actors_info_schema.dump(data)
 
 class ActorInfoSchema(ma.SQLAlchemyAutoSchema):

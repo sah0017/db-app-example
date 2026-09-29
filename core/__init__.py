@@ -1,6 +1,7 @@
 # an object of WSGI application 
 from flask import Flask	 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 from flask_marshmallow import Marshmallow
 import os
 from dotenv import load_dotenv
@@ -19,6 +20,9 @@ db_uri = f"mysql+pymysql://{db_cred['user']}:{db_cred['pass']}@{db_cred['host']}
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
  
+class Base(DeclarativeBase):
+    pass
+
 # Creating an SQLAlchemy instance
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, model_class=Base)
 ma = Marshmallow(app)

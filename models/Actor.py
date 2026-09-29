@@ -1,10 +1,10 @@
 
-from sqlalchemy import func
+from sqlalchemy import func, select
 from models.schemas import Actor
 from core import ma, db
 
 def get_actors(): 
-    all_actors = Actor.query.all()
+    all_actors = db.session.scalars(select(Actor)).all()
     return actors_schema.dump(all_actors)
 
 def add_actor(first_name, last_name):
@@ -15,7 +15,7 @@ def add_actor(first_name, last_name):
 def delete_actor(id):
 	# Deletes the data on the basis of unique id and 
 	# redirects to home page
-	data = Actor.query.get(id)
+	data = db.session.get(Actor, id)
 	db.session.delete(data)
 	db.session.commit()
      
