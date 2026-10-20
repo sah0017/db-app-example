@@ -1,5 +1,20 @@
-# an object of WSGI application 
-from flask import Flask	 
+import sys
+
+# Refuse to run outside a virtual environment so the course's pinned
+# libraries never get mixed with packages installed on the system Python.
+# This check must come before any third-party imports.
+if sys.prefix == sys.base_prefix:
+    sys.exit(
+        "This application must be run from inside a virtual environment.\n"
+        "From the project folder, run:\n"
+        "  python3 -m venv venv\n"
+        "  source venv/bin/activate        (Windows: venv\\Scripts\\activate)\n"
+        "  pip install -r requirements.txt\n"
+        "then start the app again."
+    )
+
+# an object of WSGI application
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_marshmallow import Marshmallow
