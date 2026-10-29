@@ -23,7 +23,13 @@
             <td>{{data.first_name}}</td>
             <td>{{data.last_name}}</td>
             <td>{{data.last_update}}</td>
-            <td><a href="/delete/{{data.actor_id}}" type="button">Delete</a></td>
+            <td>
+               <form action="/delete/{{data.actor_id}}" method="POST"
+                     onsubmit='return confirm({{ ("Delete " ~ data.first_name ~ " " ~ data.last_name ~ "?")|tojson }});'>
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button type="submit">Delete</button>
+               </form>
+            </td>
          </tbody>
          {% endfor%}
       </table>

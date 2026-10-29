@@ -14,17 +14,18 @@ def add_actor(first_name, last_name):
     db.session.commit()
 
 def delete_actor(id):
-	# Deletes the data on the basis of unique id.
-	# Returns False if the actor is still referenced by other
-	# tables (e.g. film_actor), since MySQL blocks that delete.
-	data = db.session.get(Actor, id)
-	db.session.delete(data)
-	try:
-		db.session.commit()
-	except IntegrityError:
-		db.session.rollback()
-		return False
-	return True
+    # Deletes the data on the basis of unique id.
+    # Responds with 404 Not Found if there is no such actor.
+    # Returns False if the actor is still referenced by other
+    # tables (e.g. film_actor), since MySQL blocks that delete.
+    data = db.get_or_404(Actor, id)
+    db.session.delete(data)
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return False
+    return True
      
 class ActorSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
