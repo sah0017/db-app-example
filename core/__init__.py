@@ -16,6 +16,7 @@ if sys.prefix == sys.base_prefix:
 # an object of WSGI application
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import URL
 from sqlalchemy.orm import DeclarativeBase
 from flask_marshmallow import Marshmallow
 import os
@@ -28,10 +29,19 @@ app = Flask(__name__, template_folder="../templates") # Flask constructor
 db_cred = { 
     'user': 'root',         # DATABASE USER 
     'pass': my_password,    # DATABASE PASSWORD 
-    'host': '127.0.0.1:3306',    # DATABASE HOSTNAME 
+    'host': '127.0.0.1',    # DATABASE HOSTNAME 
+    'port': 3306,           # DATABASE PORT 
     'name': 'sakila'        # DATABASE NAME 
 } 
-db_uri = f"mysql+pymysql://{db_cred['user']}:{db_cred['pass']}@{db_cred['host']}/{db_cred['name']}"
+# URL.create escapes special characters (@, :, /, #, %) in the password
+db_uri = URL.create(
+    "mysql+pymysql",
+    username=db_cred['user'],
+    password=db_cred['pass'],
+    host=db_cred['host'],
+    port=db_cred['port'],
+    database=db_cred['name'],
+)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
  
