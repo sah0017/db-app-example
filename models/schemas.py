@@ -10,8 +10,8 @@ from core import db
 class Actor(db.Model):
 
     actor_id: Mapped[int] = mapped_column(primary_key=True)
-    first_name: Mapped[str] = mapped_column(String(20))
-    last_name: Mapped[str] = mapped_column(String(20))
+    first_name: Mapped[str] = mapped_column(String(45))
+    last_name: Mapped[str] = mapped_column(String(45))
     last_update: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
@@ -20,8 +20,8 @@ class Actor(db.Model):
 class ActorInfo(db.Model):
 
     actor_id: Mapped[int] = mapped_column(primary_key=True)
-    first_name: Mapped[str] = mapped_column(String(20))
-    last_name: Mapped[str] = mapped_column(String(20))
+    first_name: Mapped[str] = mapped_column(String(45))
+    last_name: Mapped[str] = mapped_column(String(45))
     film_info: Mapped[Optional[str]] = mapped_column(String(255))
 
     def __repr__(self):

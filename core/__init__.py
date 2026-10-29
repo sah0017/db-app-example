@@ -35,6 +35,8 @@ if my_password is None:
     )
 
 app = Flask(__name__, template_folder="../templates") # Flask constructor 
+# Needed for flash() messages; a new random key each run is fine for local use
+app.secret_key = os.urandom(24)
 db_cred = { 
     'user': 'root',         # DATABASE USER 
     'pass': my_password,    # DATABASE PASSWORD 

@@ -81,4 +81,12 @@ python app.py
 
 Then open http://127.0.0.1:8000 in your browser.
 
+To have the app reload automatically when you edit the code, and show detailed error pages, add this line to your `.env` file:
+
+```
+FLASK_DEBUG=1
+```
+
+Only do this on your own computer: the debug error pages let anyone who can reach the app run code on it.
+
 When you're finished, run `deactivate` to leave the virtual environment.
