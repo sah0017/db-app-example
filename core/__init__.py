@@ -22,8 +22,21 @@ from flask_marshmallow import Marshmallow
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-my_password = str(os.environ.get('PASSWORD'))
+env_found = load_dotenv()
+my_password = os.environ.get('PASSWORD')
+
+# Stop with a clear message instead of trying to log in with no password
+if my_password is None:
+    if not env_found:
+        problem = "No .env file was found in the project folder."
+    else:
+        problem = "The .env file has no PASSWORD line."
+    sys.exit(
+        problem + "\n"
+        "Create a file named .env in the project folder containing:\n"
+        "  PASSWORD=your_mysql_password\n"
+        "then start the app again. See step 5 in README.md."
+    )
 
 app = Flask(__name__, template_folder="../templates") # Flask constructor 
 db_cred = { 
