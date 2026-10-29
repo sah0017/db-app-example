@@ -1,5 +1,5 @@
 from core import app
-from flask import redirect, request 
+from flask import flash, redirect, request 
 from flask.templating import render_template
 from models import Actor, ActorInfo
 
@@ -51,7 +51,8 @@ def add_actor():
 def delete_actor(id):
 	# Deletes the data on the basis of unique id and 
 	# redirects to home page
-	Actor.delete_actor(id)
+	if not Actor.delete_actor(id):
+		flash(f"Actor {id} can't be deleted because they appear in one or more films.")
 	return redirect('/')
 
 # APP ROUTE TO CALL FUNCTION TO RETRIEVE AND RETURN ACTOR INFO
