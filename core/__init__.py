@@ -6,11 +6,7 @@ import sys
 if sys.prefix == sys.base_prefix:
     sys.exit(
         "This application must be run from inside a virtual environment.\n"
-        "From the project folder, run:\n"
-        "  python3 -m venv venv\n"
-        "  source venv/bin/activate        (Windows: venv\\Scripts\\activate)\n"
-        "  pip install -r requirements.txt\n"
-        "then start the app again."
+        "Follow the Setup steps in README.md, then start the app again."
     )
 
 # an object of WSGI application
