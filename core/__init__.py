@@ -20,6 +20,10 @@ from dotenv import load_dotenv
 
 env_found = load_dotenv()
 my_password = os.environ.get('PASSWORD')
+# Not named USER: the shell already sets USER to your login name,
+# and load_dotenv() doesn't override variables that already exist
+db_user = os.environ.get('DB_USER', 'root')
+db_name = os.environ.get('DB_NAME', 'sakila')
 
 # Stop with a clear message instead of trying to log in with no password
 if my_password is None:
@@ -38,11 +42,11 @@ app = Flask(__name__, template_folder="../templates") # Flask constructor
 # Needed for flash() messages; a new random key each run is fine for local use
 app.secret_key = os.urandom(24)
 db_cred = { 
-    'user': 'root',         # DATABASE USER 
+    'user': db_user,        # DATABASE USER 
     'pass': my_password,    # DATABASE PASSWORD 
     'host': '127.0.0.1',    # DATABASE HOSTNAME 
     'port': 3306,           # DATABASE PORT 
-    'name': 'sakila'        # DATABASE NAME 
+    'name': db_name         # DATABASE NAME 
 } 
 # URL.create escapes special characters (@, :, /, #, %) in the password
 db_uri = URL.create(

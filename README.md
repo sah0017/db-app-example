@@ -7,7 +7,7 @@ A small Flask application that reads and writes actor data in the MySQL `sakila`
 - Python 3.10 or newer (check with `python3 --version`, or `py --version` on Windows)
 - MySQL running locally on port 3306, with the [sakila sample database](https://dev.mysql.com/doc/sakila/en/) installed
 
-The app connects as MySQL user `root` to `127.0.0.1:3306`. These settings are not read from `.env`. If your MySQL uses a different user or port, change `db_cred` in `core/__init__.py`.
+By default the app connects to the `sakila` database as MySQL user `root`. You can change the user and database name in `.env` (see step 5). The host and port, `127.0.0.1:3306`, are not read from `.env`; to change them, edit `db_cred` in `core/__init__.py`.
 
 ## Setup
 
@@ -63,10 +63,17 @@ This application must be run from inside a virtual environment, so its libraries
    pip install -r requirements.txt
    ```
 
-5. Create a file named `.env` in the project folder containing your MySQL root password:
+5. Create a file named `.env` in the project folder containing your MySQL password:
 
    ```
    PASSWORD=your_mysql_password
+   ```
+
+   If you connect as a MySQL user other than `root`, or your database isn't named `sakila`, add these lines too:
+
+   ```
+   DB_USER=your_mysql_user
+   DB_NAME=your_database_name
    ```
 
    This file is ignored by git, so your password won't be committed.
