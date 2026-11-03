@@ -21,7 +21,8 @@ There is no linter or build step. After adding a package, regenerate `requiremen
 ## Tests
 
 pytest with Flask's `test_client()`; `pytest.ini` sets `pythonpath = .` so tests import `app`, `core`, `models` directly. Tests run against the real MySQL database from `.env` (not SQLite: the models map onto sakila's existing tables and the `actor_info` view, and delete behaviour relies on MySQL's `film_actor` foreign key). Fixtures in `tests/conftest.py`:
-- `app` pushes an app context and, on teardown, deletes every actor whose `last_name` is `TEST_LAST_NAME`. Any actor a test creates must use that last name so the sakila data stays unchanged.
+- `app` pushes an app context.
+- `created_actor_ids` yields a list; on teardown it deletes every actor whose ID was appended. Any test that creates an actor must request this fixture, append the new `actor_id`, and use `TEST_LAST_NAME` as the last name. Count assertions compare against a count taken at the start of the test rather than assuming zero.
 - `csrf_client` pre-seeds the session with `CSRF_TOKEN`; POSTs must send it as the `csrf_token` form field or they get a 400.
 
 Configuration comes from `.env` (git-ignored): `PASSWORD` (required; the app exits with a message if missing), optional `DB_USER` (default `root`), `DB_NAME` (default `sakila`), and `FLASK_DEBUG=1` to enable the reloader/debugger. Host and port (`127.0.0.1:3306`) are hard-coded in `db_cred` in `core/__init__.py`. Running requires a local MySQL with sakila installed.
