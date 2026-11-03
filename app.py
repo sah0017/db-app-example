@@ -31,22 +31,22 @@ def check_csrf_token():
 def hello():
     return 'HELLO'
 
-# APP ROUTE TO GET RESULTS FOR SELECT QUERY
-@app.route('/get_actors')
-def get_results():
-    actors = Actor.get_actors()
-    return actors
-
-# APP ROUTE TO RENDER HOME PAGE WITH LIST OF ACTORS
+# APP ROUTE TO RENDER HOME PAGE 
 @app.route('/')
 def index():
-    # Query all data and then pass it to the template
+    return render_template('index.html')
+
+# APP ROUTE TO GET RESULTS FOR SELECT QUERY
+@app.route('/get_actors')
+def get_actors():
     actors = Actor.get_actors()
-    return render_template('index.html', actors=actors)
+    return render_template('actors.html', actors=actors)
+    
+
 
 # APP ROUTE TO RENDER FORM TO ADD ACTOR DATA
-@app.route('/add_data')
-def add_data():
+@app.route('/add_actor')
+def add_actor_form():
     return render_template('add_actor.html', max_name_length=MAX_NAME_LENGTH)
 
 # APP ROUTE TO CALL FUNCTION TO ADD ACTOR
@@ -64,24 +64,24 @@ def add_actor():
     # Send the user back to the form with a message if the input is invalid
     if not first_name or not last_name:
         flash("Please enter both a first name and a last name.")
-        return redirect(url_for('add_data'))
+        return redirect(url_for('add_actor_form'))
     if len(first_name) > MAX_NAME_LENGTH or len(last_name) > MAX_NAME_LENGTH:
         flash(f"Names can be at most {MAX_NAME_LENGTH} characters long.")
-        return redirect(url_for('add_data'))
+        return redirect(url_for('add_actor_form'))
 
     # call model function that will store data as a row in our datatable
     Actor.add_actor(first_name, last_name)
-    return redirect(url_for('index'))
+    return redirect(url_for('get_actors'))
 
 # APP ROUTE TO CALL FUNCTION TO DELETE ACTOR
 # POST only, so following a link or loading an image can't delete data
 @app.route('/delete/<int:id>', methods=["POST"])
 def delete_actor(id):
     # Deletes the data on the basis of unique id and
-    # redirects to home page
+    # redirects to actor page
     if not Actor.delete_actor(id):
         flash(f"Actor {id} can't be deleted because they appear in one or more films.")
-    return redirect(url_for('index'))
+    return redirect(url_for('get_actors'))
 
 # APP ROUTE TO CALL FUNCTION TO RETRIEVE AND RETURN ACTOR INFO
 @app.route('/actor_info')
