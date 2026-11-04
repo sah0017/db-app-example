@@ -16,19 +16,19 @@
 		<label>Description</label>
 		<textarea name="description" placeholder="description (optional)..."></textarea>
 		<br>
-		<label>Release Year</label>
-		<input type="number" name="release_year" placeholder="e.g. 2006"
+		<label for="release_year">Release Year</label>
+		<input id="release_year" type="number" name="release_year" placeholder="e.g. 2006"
 		       min="{{ min_release_year }}" max="{{ max_release_year }}">
 		<br>
-		<label>Language</label>
-		<select name="language_id" required>
+		<label for="language_id">Language</label>
+		<select id="language_id" name="language_id" required>
 			{% for language in languages %}
 			<option value="{{ language.language_id }}">{{ language.name }}</option>
 			{% endfor %}
 		</select>
 		<br>
-		<label>Rating</label>
-		<select name="rating">
+		<label for="rating">Rating</label>
+		<select id="rating" name="rating">
 			{% for rating in ratings %}
 			<option value="{{ rating }}">{{ rating }}</option>
 			{% endfor %}
