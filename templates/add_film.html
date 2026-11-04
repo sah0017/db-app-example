@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Film</title>
+</head>
+<body>
+	<h3>Film form</h3>
+	{% for message in get_flashed_messages() %}
+	<p style="color: red;">{{ message }}</p>
+	{% endfor %}
+	<form action="/add_film" method="POST">
+		<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+		<label>Title</label>
+		<input type="text" name="title" placeholder="title..." required maxlength="{{ max_title_length }}">
+		<br>
+		<label>Description</label>
+		<textarea name="description" placeholder="description (optional)..."></textarea>
+		<br>
+		<label>Release Year</label>
+		<input type="number" name="release_year" placeholder="e.g. 2006"
+		       min="{{ min_release_year }}" max="{{ max_release_year }}">
+		<br>
+		<label>Language</label>
+		<select name="language_id" required>
+			{% for language in languages %}
+			<option value="{{ language.language_id }}">{{ language.name }}</option>
+			{% endfor %}
+		</select>
+		<br>
+		<label>Rating</label>
+		<select name="rating">
+			{% for rating in ratings %}
+			<option value="{{ rating }}">{{ rating }}</option>
+			{% endfor %}
+		</select>
+		<br>
+		<button type="submit">Add</button>
+	</form>
+	<a href="/get_films">BACK TO FILMS</a>
+</body>
+</html>
