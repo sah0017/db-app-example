@@ -115,6 +115,10 @@ def add_film():
     title = (request.form.get("title") or "").strip()
     # An empty description is stored as NULL rather than ''
     description = (request.form.get("description") or "").strip() or None
+    # MySQL TEXT can hold at most 65,535 bytes, not characters.
+    if description is not None and len(description.encode("utf-8")) > 65535:
+        flash("Description is too long. Please use less text.")
+        return redirect(url_for('add_film_form'))
     release_year = (request.form.get("release_year") or "").strip()
     language_id = (request.form.get("language_id") or "").strip()
     rating = request.form.get("rating") or None
