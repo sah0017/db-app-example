@@ -32,8 +32,8 @@ def get_avg_rental():
         FROM store s
         JOIN address a ON s.address_id = a.address_id
         JOIN city ON a.city_id = city.city_id
-        JOIN staff st ON s.store_id = st.store_id
-        JOIN rental r ON st.staff_id = r.staff_id
+        JOIN inventory i ON s.store_id = i.store_id
+        JOIN rental r ON i.inventory_id = r.inventory_id
         JOIN payment p ON r.rental_id = p.rental_id
         GROUP BY s.store_id, city.city
         ORDER BY total_revenue DESC;"""))
