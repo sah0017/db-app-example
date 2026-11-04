@@ -4,7 +4,7 @@ import secrets
 from core import app
 from flask import abort, flash, redirect, request, session, url_for
 from flask.templating import render_template
-from models import Actor, ActorInfo, Film, Language
+from models import Actor, ActorInfo, Film, Language, Queries
 
 # sakila's actor.first_name and actor.last_name are VARCHAR(45)
 MAX_NAME_LENGTH = 45
@@ -159,6 +159,23 @@ def delete_film(id):
     if not Film.delete_film(id):
         flash(f"Film {id} can't be deleted because it has actors, categories or rental inventory.")
     return redirect(url_for('get_films'))
+
+# APP ROUTE TO RENDER PAGE LISTING THE QUERIES
+@app.route('/get_queries')
+def get_queries():
+    return render_template('queries.html')
+
+# APP ROUTE TO SHOW THE TOP 5 CUSTOMERS BY AMOUNT SPENT
+@app.route('/queries/top_customers')
+def top_customers():
+    customers = Queries.get_top5custs()
+    return render_template('top_customers.html', customers=customers)
+
+# APP ROUTE TO SHOW RENTAL AND REVENUE TOTALS FOR EACH STORE
+@app.route('/queries/store_rentals')
+def store_rentals():
+    stores = Queries.get_avg_rental()
+    return render_template('store_rentals.html', stores=stores)
 
 # APP ROUTE TO CALL FUNCTION TO RETRIEVE AND RETURN ACTOR INFO
 @app.route('/actor_info')
