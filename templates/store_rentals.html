@@ -21,7 +21,7 @@
             <td>{{row.store_id}}</td>
             <td>{{row.store_location}}</td>
             <td>{{ "{:,}".format(row.total_rentals) }}</td>
-            <td>{{ "{:.1f}".format(row.avg_rental_days) }}</td>
+            <td>{{ "{:.1f}".format(row.avg_rental_days) if row.avg_rental_days is not none else 'N/A' }}</td>
             <td>${{ "{:,.2f}".format(row.total_revenue) }}</td>
             <td>${{ "{:,.2f}".format(row.avg_revenue_per_rental) }}</td>
          </tbody>
