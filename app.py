@@ -134,16 +134,23 @@ def add_film():
     # Release year is optional, but if given it must be a whole number
     # that fits in MySQL's YEAR column
     if release_year:
-        if not release_year.isdigit() or not MIN_RELEASE_YEAR <= int(release_year) <= MAX_RELEASE_YEAR:
+        try:
+            release_year = int(release_year) if release_year.isdigit() else None
+        except ValueError:
+            release_year = None
+        if release_year is None or not MIN_RELEASE_YEAR <= release_year <= MAX_RELEASE_YEAR:
             flash(f"Release year must be between {MIN_RELEASE_YEAR} and {MAX_RELEASE_YEAR}.")
             return redirect(url_for('add_film_form'))
-        release_year = int(release_year)
     else:
         release_year = None
 
     # The form's dropdowns only offer valid choices, but a request
     # can be sent without using the form, so check them here too
-    if not language_id.isdigit() or not Language.language_exists(int(language_id)):
+    try:
+        language_id = int(language_id) if language_id.isdigit() else None
+    except ValueError:
+        language_id = None
+    if language_id is None or not Language.language_exists(language_id):
         flash("Please choose a language from the list.")
         return redirect(url_for('add_film_form'))
     if rating is not None and rating not in FILM_RATINGS:
