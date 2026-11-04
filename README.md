@@ -1,6 +1,6 @@
 # db-app-example
 
-A small Flask application that reads and writes actor data in the MySQL `sakila` sample database.
+A small Flask application that reads and writes actor and film data in the MySQL `sakila` sample database.
 
 ## Prerequisites
 
@@ -113,4 +113,4 @@ pytest tests/test_actors.py
 pytest tests/test_actors.py::test_add_actor
 ```
 
-The tests connect to the same MySQL database as the app, using the settings in your `.env` file, so MySQL must be running. Every actor a test adds has the last name `PYTEST-TEMP` and is deleted when the test finishes, so your sakila data is left as it was.
+The tests connect to the same MySQL database as the app, using the settings in your `.env` file, so MySQL must be running. Every actor a test adds has the last name `PYTEST-TEMP`, and every film a test adds has a title starting with `PYTEST-TEMP`. They are deleted when the test finishes, so your sakila data is left as it was.

@@ -14,15 +14,19 @@ def count_test_actors():
 
 # PAGES THAT ONLY READ DATA
 
-def test_home_page_lists_actors(client):
+def test_home_page_links_to_actors(client):
     response = client.get('/')
     assert response.status_code == 200
-    assert b'Actors' in response.data
+    assert b'href="/get_actors"' in response.data
 
-def test_get_actors_returns_json(client):
+def test_actors_page_lists_actors(client):
+    # Look up a real actor so we can check their name appears in the table
+    first_name = db.session.scalar(select(Actor.first_name).limit(1))
+
     response = client.get('/get_actors')
     assert response.status_code == 200
-    assert 'first_name' in response.get_json()[0]
+    assert b'<h3>Actors</h3>' in response.data
+    assert first_name.encode() in response.data
 
 # ADDING AN ACTOR
 
@@ -42,7 +46,9 @@ def test_add_actor(csrf_client, created_actor_ids):
     )
     if actor_id is not None:
         created_actor_ids.append(actor_id)
+    # After adding, the user is sent to the list of actors
     assert response.status_code == 302
+    assert response.location.endswith('/get_actors')
     assert actor_id is not None
     assert count_test_actors() == actor_count + 1
 

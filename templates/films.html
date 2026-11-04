@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Films</title>
+</head>
+<body>
+	<h3>Films</h3>
+	{% for message in get_flashed_messages() %}
+	<p style="color: red;">{{ message }}</p>
+	{% endfor %}
+	<a href="/add_film">ADD  </a><br><a href="/"> BACK TO INDEX</a>
+      <br>
+      <table style="border-spacing: 30px;">
+         <thead style="padding:15px">
+            <th>Id</th>
+            <th>Title</th>
+            <th>Release Year</th>
+            <th>Rating</th>
+            <th>Last Update</th>
+            <th>#</th>
+         </thead>
+         {% for data in films %}
+         <tbody style="padding-right:15px">
+            <td>{{data.film_id}}</td>
+            <td>{{data.title}}</td>
+            <td>{{data.release_year or ''}}</td>
+            <td>{{data.rating or ''}}</td>
+            <td>{{data.last_update}}</td>
+            <td>
+               <form action="/delete_film/{{data.film_id}}" method="POST"
+                     onsubmit='return confirm({{ ("Delete " ~ data.title ~ "?")|tojson }});'>
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button type="submit">Delete</button>
+               </form>
+            </td>
+         </tbody>
+         {% endfor%}
+      </table>
+</body>
+</html>

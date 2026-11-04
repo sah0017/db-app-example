@@ -3,35 +3,14 @@
 	<title>Index Page</title>
 </head>
 <body>
-	<h3>Actors</h3>
-	{% for message in get_flashed_messages() %}
-	<p style="color: red;">{{ message }}</p>
-	{% endfor %}
-	<a href="/add_data">ADD</a>
-      <br>
-      <table style="border-spacing: 30px;">
-         <thead style="padding:15px">
-            <th>Id</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Last Update</th>
-            <th>#</th>
-         </thead>
-         {% for data in actors %}
-         <tbody style="padding-right:15px">
-            <td>{{data.actor_id}}</td>
-            <td>{{data.first_name}}</td>
-            <td>{{data.last_name}}</td>
-            <td>{{data.last_update}}</td>
-            <td>
-               <form action="/delete/{{data.actor_id}}" method="POST"
-                     onsubmit='return confirm({{ ("Delete " ~ data.first_name ~ " " ~ data.last_name ~ "?")|tojson }});'>
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                  <button type="submit">Delete</button>
-               </form>
-            </td>
-         </tbody>
-         {% endfor%}
-      </table>
+    <h3>Index Page</h3>
+    {% for message in get_flashed_messages() %}
+    <p style="color: red;">{{ message }}</p>
+    {% endfor %}
+    <h3>Options</h3>
+        <a href="/get_actors">Actors</a><br>
+        <a href="/get_films">Films</a><br>
+        <a href="/get_queries">Dashboard</a>
+
 </body>
 </html>

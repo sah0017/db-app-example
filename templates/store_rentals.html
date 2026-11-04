@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rentals by Store</title>
+</head>
+<body>
+	<h3>Rentals and Revenue by Store</h3>
+	<a href="/get_queries">BACK TO DASHBOARD</a>
+      <br>
+      <table style="border-spacing: 30px;">
+         <thead style="padding:15px">
+            <th>Store Id</th>
+            <th>Location</th>
+            <th>Total Rentals</th>
+            <th>Average Rental (days)</th>
+            <th>Total Revenue</th>
+            <th>Average Revenue per Rental</th>
+         </thead>
+         {% for row in stores %}
+         <tbody style="padding-right:15px">
+            <td>{{row.store_id}}</td>
+            <td>{{row.store_location}}</td>
+            <td>{{ "{:,}".format(row.total_rentals) }}</td>
+            <td>{{ "{:.1f}".format(row.avg_rental_days) if row.avg_rental_days is not none else 'N/A' }}</td>
+            <td>${{ "{:,.2f}".format(row.total_revenue) }}</td>
+            <td>${{ "{:,.2f}".format(row.avg_revenue_per_rental) }}</td>
+         </tbody>
+         {% endfor%}
+      </table>
+</body>
+</html>
