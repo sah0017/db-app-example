@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Add Actor{% endblock %}
+{% block content %}
+	<h3>Actor form</h3>
+	<form action="{{ url_for('actors.add_actor') }}" method="POST">
+		<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+		<label for="first_name">First Name</label>
+		<input id="first_name" type="text" name="first_name" placeholder="first name..." required maxlength="{{ max_name_length }}">
+		<label for="last_name">Last Name</label>
+		<input id="last_name" type="text" name="last_name" placeholder="last name..." required maxlength="{{ max_name_length }}">
+		<button type="submit">Add</button>
+	</form>
+	<a href="{{ url_for('actors.get_actors') }}">BACK TO ACTORS</a>
+{% endblock %}

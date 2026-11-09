@@ -1,11 +1,26 @@
 from uuid import uuid4
 
-from sqlalchemy import func, select, text
+import pytest
+from sqlalchemy import delete, func, select, text
 
-from app import MAX_NAME_LENGTH
-from conftest import CSRF_TOKEN, TEST_LAST_NAME
+from conftest import CSRF_TOKEN
 from core import db
 from models.schemas import Actor
+from routes.actors import MAX_NAME_LENGTH
+
+# Every actor a test adds uses this last name, so test rows are easy to spot
+TEST_LAST_NAME = "PYTEST-TEMP"
+
+# Tests append the ID of each actor they add; the actors are
+# deleted again once the test finishes, so the sakila data is unchanged
+@pytest.fixture
+def created_actor_ids(app):
+    actor_ids = []
+    yield actor_ids
+    db.session.rollback()
+    if actor_ids:
+        db.session.execute(delete(Actor).where(Actor.actor_id.in_(actor_ids)))
+        db.session.commit()
 
 def count_test_actors():
     return db.session.scalar(
