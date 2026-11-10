@@ -34,6 +34,14 @@ def test_home_page_links_to_actors(client):
     assert response.status_code == 200
     assert b'href="/get_actors"' in response.data
 
+@pytest.mark.parametrize("path", ["/get_actors", "/add_actor"])
+def test_actors_navigation_link_on_feature_pages(client, path):
+    # AC1
+    response = client.get(path)
+    assert response.status_code == 200
+    nav = response.data.split(b'<nav>', 1)[1].split(b'</nav>', 1)[0]
+    assert b'href="/get_actors"' in nav
+
 def test_actors_page_lists_actors(client):
     # Look up a real actor so we can check their name appears in the table
     first_name = db.session.scalar(select(Actor.first_name).limit(1))
