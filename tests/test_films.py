@@ -1,11 +1,26 @@
 from uuid import uuid4
 
-from sqlalchemy import func, select, text
+import pytest
+from sqlalchemy import delete, func, select, text
 
-from app import MAX_RELEASE_YEAR, MAX_TITLE_LENGTH
-from conftest import CSRF_TOKEN, TEST_FILM_TITLE_PREFIX
+from conftest import CSRF_TOKEN
 from core import db
 from models.schemas import Film
+from routes.films import MAX_RELEASE_YEAR, MAX_TITLE_LENGTH
+
+# Every film a test adds has a title starting with this prefix
+TEST_FILM_TITLE_PREFIX = "PYTEST-TEMP"
+
+# Tests append the ID of each film they add; the films are
+# deleted again once the test finishes, so the sakila data is unchanged
+@pytest.fixture
+def created_film_ids(app):
+    film_ids = []
+    yield film_ids
+    db.session.rollback()
+    if film_ids:
+        db.session.execute(delete(Film).where(Film.film_id.in_(film_ids)))
+        db.session.commit()
 
 ENGLISH_LANGUAGE_ID = 1
 

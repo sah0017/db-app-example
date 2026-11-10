@@ -1,16 +1,9 @@
-<html>
-<head>
-	<title>Index Page</title>
-</head>
-<body>
-    <h3>Index Page</h3>
-    {% for message in get_flashed_messages() %}
-    <p style="color: red;">{{ message }}</p>
-    {% endfor %}
-    <h3>Options</h3>
-        <a href="/get_actors">Actors</a><br>
-        <a href="/get_films">Films</a><br>
-        <a href="/get_queries">Dashboard</a>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Index Page{% endblock %}
+{% block content %}
+	<h3>Index Page</h3>
+	<h3>Options</h3>
+	{% for label, endpoint in nav_links %}
+	<a href="{{ url_for(endpoint) }}">{{ label }}</a><br>
+	{% endfor %}
+{% endblock %}
