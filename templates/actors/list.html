@@ -1,13 +1,8 @@
-<html>
-<head>
-	<title>Index Page</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Actors{% endblock %}
+{% block content %}
 	<h3>Actors</h3>
-	{% for message in get_flashed_messages() %}
-	<p style="color: red;">{{ message }}</p>
-	{% endfor %}
-	<a href="/add_actor">ADD  </a><br><a href="/"> BACK TO INDEX</a>
+	<a href="{{ url_for('actors.add_actor_form') }}">ADD</a>
       <br>
       <table style="border-spacing: 30px;">
          <thead style="padding:15px">
@@ -24,7 +19,7 @@
             <td>{{data.last_name}}</td>
             <td>{{data.last_update}}</td>
             <td>
-               <form action="/delete/{{data.actor_id}}" method="POST"
+               <form action="{{ url_for('actors.delete_actor', id=data.actor_id) }}" method="POST"
                      onsubmit='return confirm({{ ("Delete " ~ data.first_name ~ " " ~ data.last_name ~ "?")|tojson }});'>
                   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                   <button type="submit">Delete</button>
@@ -33,5 +28,4 @@
          </tbody>
          {% endfor%}
       </table>
-</body>
-</html>
+{% endblock %}

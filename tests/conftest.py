@@ -1,21 +1,17 @@
 # Shared setup for the tests. pytest finds this file automatically
 # and passes the fixtures below to any test that names them as a parameter.
 #
-# The tests use the same MySQL database as the app (set in .env).
-# Every actor a test adds uses TEST_LAST_NAME, and the test puts its
-# actor_id in the created_actor_ids list (films work the same way, with
-# TEST_FILM_TITLE_PREFIX and created_film_ids). Those rows are deleted after
-# the test, so the sakila data is left unchanged.
+# Only fixtures that EVERY feature uses belong here. A fixture for one
+# feature (for example, one that cleans up the rows its tests add) goes in
+# that feature's own test file, so teammates don't edit this file at once.
+#
+# The tests use the same MySQL database as the app (set in .env), so every
+# test must delete any rows it adds. See tests/test_actors.py for the pattern.
 
 import pytest
-from sqlalchemy import delete
 
 from app import app as flask_app
-from core import db
-from models.schemas import Actor, Film
 
-TEST_LAST_NAME = "PYTEST-TEMP"
-TEST_FILM_TITLE_PREFIX = "PYTEST-TEMP"
 CSRF_TOKEN = "test-token"
 
 @pytest.fixture
@@ -23,27 +19,6 @@ def app():
     flask_app.config['TESTING'] = True
     with flask_app.app_context():
         yield flask_app
-
-# Tests append the ID of each actor they add; the actors are
-# deleted again once the test finishes
-@pytest.fixture
-def created_actor_ids(app):
-    actor_ids = []
-    yield actor_ids
-    db.session.rollback()
-    if actor_ids:
-        db.session.execute(delete(Actor).where(Actor.actor_id.in_(actor_ids)))
-        db.session.commit()
-
-# The same idea for films: tests append the ID of each film they add
-@pytest.fixture
-def created_film_ids(app):
-    film_ids = []
-    yield film_ids
-    db.session.rollback()
-    if film_ids:
-        db.session.execute(delete(Film).where(Film.film_id.in_(film_ids)))
-        db.session.commit()
 
 # A test client sends requests to the app without starting a server
 @pytest.fixture

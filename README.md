@@ -114,3 +114,17 @@ pytest tests/test_actors.py::test_add_actor
 ```
 
 The tests connect to the same MySQL database as the app, using the settings in your `.env` file, so MySQL must be running. Every actor a test adds has the last name `PYTEST-TEMP`, and every film a test adds has a title starting with `PYTEST-TEMP`. They are deleted when the test finishes, so your sakila data is left as it was.
+
+## How the code is organized
+
+Each feature of the app has its own files, so teammates working on different features don't edit the same file:
+
+| Folder or file | What's in it |
+|---|---|
+| `specs/` | The project spec and one spec per feature. Start with `specs/README.md`. |
+| `routes/<feature>.py` | The feature's pages (its Flask routes) |
+| `templates/<feature>/` | The feature's HTML pages. Each one extends `templates/base.html`, which adds the navigation bar. |
+| `models/` | Database access: `schemas.py` maps the tables, and one module per table holds its queries |
+| `tests/test_<feature>.py` | The feature's tests |
+| `app.py` | Shared setup only. Features are found and added automatically, so you don't need to edit it. |
+| `CLAUDE.md` | Instructions your AI coding assistant reads before it changes anything |

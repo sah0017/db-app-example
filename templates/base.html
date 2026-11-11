@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}Home{% endblock %}</title>
+</head>
+<body>
+	{# Every page extends this file, so the navigation and messages appear on each one.
+	   Each feature adds its own link by setting NAV_LINK in its routes file. #}
+	<nav>
+		<a href="{{ url_for('index') }}">Home</a>
+		{% for label, endpoint in nav_links %}
+		| <a href="{{ url_for(endpoint) }}">{{ label }}</a>
+		{% endfor %}
+	</nav>
+	<hr>
+	{% for message in get_flashed_messages() %}
+	<p style="color: red;">{{ message }}</p>
+	{% endfor %}
+	{% block content %}{% endblock %}
+</body>
+</html>

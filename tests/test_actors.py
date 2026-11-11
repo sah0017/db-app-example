@@ -1,11 +1,26 @@
 from uuid import uuid4
 
-from sqlalchemy import func, select, text
+import pytest
+from sqlalchemy import delete, func, select, text
 
-from app import MAX_NAME_LENGTH
-from conftest import CSRF_TOKEN, TEST_LAST_NAME
+from conftest import CSRF_TOKEN
 from core import db
 from models.schemas import Actor
+from routes.actors import MAX_NAME_LENGTH
+
+# Every actor a test adds uses this last name, so test rows are easy to spot
+TEST_LAST_NAME = "PYTEST-TEMP"
+
+# Tests append the ID of each actor they add; the actors are
+# deleted again once the test finishes, so the sakila data is unchanged
+@pytest.fixture
+def created_actor_ids(app):
+    actor_ids = []
+    yield actor_ids
+    db.session.rollback()
+    if actor_ids:
+        db.session.execute(delete(Actor).where(Actor.actor_id.in_(actor_ids)))
+        db.session.commit()
 
 def count_test_actors():
     return db.session.scalar(
@@ -18,6 +33,14 @@ def test_home_page_links_to_actors(client):
     response = client.get('/')
     assert response.status_code == 200
     assert b'href="/get_actors"' in response.data
+
+@pytest.mark.parametrize("path", ["/get_actors", "/add_actor"])
+def test_actors_navigation_link_on_feature_pages(client, path):
+    # AC1
+    response = client.get(path)
+    assert response.status_code == 200
+    nav = response.data.split(b'<nav>', 1)[1].split(b'</nav>', 1)[0]
+    assert b'href="/get_actors"' in nav
 
 def test_actors_page_lists_actors(client):
     # Look up a real actor so we can check their name appears in the table

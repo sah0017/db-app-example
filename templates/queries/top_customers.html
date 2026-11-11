@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Top 5 Customers</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Top 5 Customers{% endblock %}
+{% block content %}
 	<h3>Top 5 Customers by Amount Spent</h3>
-	<a href="/get_queries">BACK TO DASHBOARD</a>
+	<a href="{{ url_for('queries.get_queries') }}">BACK TO DASHBOARD</a>
       <br>
       <table style="border-spacing: 30px;">
          <thead style="padding:15px">
@@ -26,5 +23,4 @@
          </tbody>
          {% endfor%}
       </table>
-</body>
-</html>
+{% endblock %}
